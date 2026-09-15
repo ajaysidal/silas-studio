@@ -1,0 +1,21 @@
+﻿{
+  "endpoints": {
+    "deepseek-v4": {
+      "url": "https://integrate.api.nvidia.com/v1",
+      "model": "deepseek-ai/deepseek-v4"
+    },
+    "nemotron-3.5": {
+      "url": "https://integrate.api.nvidia.com/v1",
+      "model": "nvidia/nemotron-3.5"
+    },
+    "kimi-k3": {
+      "url": "https://integrate.api.nvidia.com/v1",
+      "model": "moonshot/kimi-k3"
+    }
+  },
+  "apiKey": "${NVIDIA_API_KEY}",
+  "defaults": {
+    "temperature": 0.7,
+    "maxTokens": 4096
+  }
+}
