@@ -2,6 +2,10 @@
 
 let configCache: NIMConfig | null = null
 
+export function clearNIMConfigCache(): void {
+  configCache = null
+}
+
 export async function getNIMConfig(): Promise<NIMConfig> {
   if (configCache) return configCache
 
@@ -12,6 +16,7 @@ export async function getNIMConfig(): Promise<NIMConfig> {
   const configFile = await fs.readFile(configPath, "utf-8")
   configCache = JSON.parse(configFile)
   
+  if (!configCache) throw new Error("NIM config not loaded")
   return configCache
 }
 
