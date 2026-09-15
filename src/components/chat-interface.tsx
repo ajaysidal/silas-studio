@@ -8,12 +8,20 @@ interface Message {
   content: string
 }
 
+const OLLAMA_MODELS = [
+  { value: "qwen2.5-coder:7b", label: "Qwen 2.5 Coder 7B (Recommended)" },
+  { value: "qwen2.5-coder:14b", label: "Qwen 2.5 Coder 14B (Better quality)" },
+  { value: "deepseek-coder-v2:16b", label: "DeepSeek Coder V2 16B" },
+  { value: "codellama:34b", label: "CodeLlama 34B" },
+  { value: "llama3.1:70b", label: "Llama 3.1 70B" },
+]
+
 export function ChatInterface() {
   const { data: session } = useSession()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [selectedModel, setSelectedModel] = useState("deepseek-v4")
+  const [selectedModel, setSelectedModel] = useState("qwen2.5-coder:7b")
   const messagesEndRef = useRef<HTMLDivElement>(null)
   
   const scrollToBottom = () => {
@@ -38,7 +46,7 @@ export function ChatInterface() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [{ role: "system", content: "You are a helpful coding assistant." }, ...messages, userMessage],
+          messages: [{ role: "system", content: "You are a helpful coding assistant specialized in modern web development, 3D graphics, and software architecture." }, ...messages, userMessage],
           model: selectedModel,
           stream: true,
         }),
@@ -99,11 +107,13 @@ export function ChatInterface() {
           <select
             value={selectedModel}
             onChange={(e) => setSelectedModel(e.target.value)}
-            className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white min-w-[280px]"
           >
-            <option value="deepseek-v4">DeepSeek V4</option>
-            <option value="nemotron-3.5">Nemotron 3.5</option>
-            <option value="kimi-k3">Kimi K3</option>
+            {OLLAMA_MODELS.map((model) => (
+              <option key={model.value} value={model.value}>
+                {model.label}
+              </option>
+            ))}
           </select>
           <span className="text-sm text-gray-600 dark:text-gray-400">
             Signed in as {session?.user?.email}
@@ -115,14 +125,13 @@ export function ChatInterface() {
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+            className={message.role === "user" ? "flex justify-end" : "flex justify-start"}
           >
             <div
-              className={`max-w-[70%] p-4 rounded-2xl ${
-                message.role === "user"
-                  ? "bg-blue-600 text-white rounded-br-none"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-none"
-              }`}
+              className={message.role === "user"
+                ? "max-w-[70%] p-4 rounded-2xl bg-blue-600 text-white rounded-br-none"
+                : "max-w-[70%] p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-none"
+              }
             >
               <pre className="whitespace-pre-wrap font-mono text-sm">{message.content}</pre>
             </div>

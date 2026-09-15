@@ -1,5 +1,5 @@
 ﻿import { auth } from "@/auth/auth"
-import { callNIM, streamNIM } from "@/lib/nim-client"
+import { callOllama, streamOllama } from "@/lib/ollama-client"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
@@ -18,11 +18,11 @@ export async function POST(request: NextRequest) {
     
     if (stream) {
       const encoder = new TextEncoder()
-      const stream = new ReadableStream({
+      const streamResponse = new ReadableStream({
         async start(controller) {
           try {
-            for await (const chunk of streamNIM(messages, { model, temperature, maxTokens })) {
-              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: chunk })}\n\n`))
+            for await (const chunk of streamOllama(messages, { model, temperature, maxTokens })) {
+              controller.enqueue(encoder.encode("data: " + JSON.stringify({ content: chunk }) + "\n\n"))
             }
             controller.enqueue(encoder.encode("data: [DONE]\n\n"))
             controller.close()
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         },
       })
       
-      return new NextResponse(stream, {
+      return new NextResponse(streamResponse, {
         headers: {
           "Content-Type": "text/event-stream",
           "Cache-Control": "no-cache",
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       })
     }
     
-    const response = await callNIM(messages, { model, temperature, maxTokens })
+    const response = await callOllama(messages, { model, temperature, maxTokens })
     return NextResponse.json(response)
   } catch (error) {
     console.error("Chat API error:", error)
