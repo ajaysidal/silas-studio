@@ -1,4 +1,6 @@
-# **Silas Studio: Product Overview & Enterprise Architecture Blueprint**
+import pathlib
+
+content = """# **Silas Studio: Product Overview & Enterprise Architecture Blueprint**
 
 **Version:** 2.0 (Current Implementation State)
 **Classification:** Strategic Stakeholder Documentation
@@ -168,7 +170,7 @@
 
 ### **Command Integrity Protocol**
 - All terminal commands compatible with **Windows PowerShell**
-- Explicit working directories: `cd C:\Projects\silas-studio`
+- Explicit working directories: `cd C:\\Projects\\silas-studio`
 - Robust syntax: semicolon separators (`;`) over conditional chaining (`&&`)
 - UTF-8 encoding without BOM for all config/source files
 
@@ -279,3 +281,7 @@ silas-studio/
 ---
 
 **Document Control:** This blueprint reflects the **actual implemented state** as of the latest commit (`48a0c3c`). All future architectural decisions must reference and update this document.
+"""
+
+pathlib.Path("Silas Studio_ Product Overview & Enterprise Architecture Blueprint.md").write_text(content, encoding="utf-8")
+print("Blueprint updated successfully!")

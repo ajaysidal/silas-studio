@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation"
 const navigation = [
   { name: "Dashboard", href: "/" },
   { name: "Chat", href: "/chat" },
+  { name: "Page Builder", href: "/page-builder" },
   { name: "Projects", href: "/projects" },
   { name: "Settings", href: "/settings" },
 ]
