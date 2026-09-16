@@ -10,6 +10,7 @@ const navigation = [
   { name: "Page Builder", href: "/page-builder" },
   { name: "Projects", href: "/projects" },
   { name: "Assets", href: "/assets" },
+  { name: "Deployment", href: "/deployment" },
   { name: "Settings", href: "/settings" },
 ]
 
