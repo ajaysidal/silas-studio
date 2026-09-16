@@ -12,6 +12,7 @@ const navigation = [
   { name: "Assets", href: "/assets" },
   { name: "Deployment", href: "/deployment" },
   { name: "Media", href: "/media" },
+  { name: "Agent Settings", href: "/agent-settings" },
   { name: "Settings", href: "/settings" },
 ]
 
