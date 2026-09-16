@@ -41,7 +41,7 @@ function extractComponentFiles(
   processedPaths.add(relativePath)
 
   // Generate the file content
-  const content = generateComponentFile(component, options)
+  const content = generateComponentFile(component)
   
   files.push({
     path: relativePath,
@@ -57,7 +57,7 @@ function extractComponentFiles(
   }
 }
 
-function generateComponentFile(component: ComponentSpec, options?: GenerationOptions): string {
+function generateComponentFile(component: ComponentSpec): string {
   const lines: string[] = []
 
   // File header comment
@@ -113,10 +113,6 @@ function formatImport(imp: { source: string; imports: string[]; type: "default" 
 }
 
 function generateComponentFromSpec(component: ComponentSpec): string {
-  const propTypes = component.props
-    .map(p => `${p.name}${p.required ? "" : "?"}: ${p.type}`)
-    .join(", ")
-  
   const propDestructuring = component.props
     .map(p => p.name)
     .join(", ")

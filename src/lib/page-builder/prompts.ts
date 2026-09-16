@@ -1,6 +1,6 @@
 // Page Builder Engine - System Prompts for Code Generation
 
-import type { GenerationRequest, ComponentSpec, DesignSystemSpec } from "@/types/page-builder"
+import type { GenerationRequest } from "@/types/page-builder"
 
 export const PAGE_BUILDER_SYSTEM_PROMPT = `You are Silas Studio's Page Builder Engine - an expert Next.js/React/Tailwind code generator.
 

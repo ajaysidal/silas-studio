@@ -18,6 +18,7 @@ model User {
   projects      Project[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  agentSettings AgentSettings?
 }
 
 model Account {
@@ -75,3 +76,14 @@ model Message {
   project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
 }
+
+model AgentSettings {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  defaultModel String?  // e.g., "qwen2.5-coder:7b"
+  temperature  Float?   // 0.0 – 1.0
+  maxTokens    Int?    // max tokens for generation
+  systemPrompt String? // optional system prompt for the agent
+}
+

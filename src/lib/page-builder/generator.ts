@@ -5,7 +5,6 @@ import type {
   GenerationRequest, 
   GenerationResponse, 
   ComponentSpec, 
-  GeneratedFile,
   DesignSystemSpec 
 } from "@/types/page-builder"
 import { buildGenerationPrompt } from "./prompts"
@@ -90,7 +89,7 @@ export class PageBuilderEngine {
     }
   }
 
-  async refineComponent(componentName: string, feedback: string): Promise<ComponentSpec | null> {
+  async refineComponent(componentName: string, _feedback: string): Promise<ComponentSpec | null> {
     const component = this.componentRegistry.get(componentName)
     if (!component) return null
 

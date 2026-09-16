@@ -1,7 +1,6 @@
 ﻿"use client"
 
 import { useState, useEffect } from "react"
-import { useSession } from "next-auth/react"
 
 interface Project {
   id: string
@@ -13,7 +12,6 @@ interface Project {
 }
 
 export function ProjectsList() {
-  const { data: session } = useSession()
   const [projects, setProjects] = useState<Project[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [showCreateModal, setShowCreateModal] = useState(false)
@@ -33,7 +31,8 @@ export function ProjectsList() {
     }
   }
   
-  useEffect(() => {
+useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProjects()
   }, [])
   
@@ -56,7 +55,7 @@ export function ProjectsList() {
     }
   }
   
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (_id: string) => {
     if (!confirm("Are you sure you want to delete this project?")) return
     // TODO: Implement delete API
   }

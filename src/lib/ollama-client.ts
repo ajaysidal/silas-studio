@@ -1,6 +1,4 @@
-﻿// Ollama client - replaces NIM client for local, free AI inference
-
-import type { OllamaConfig, OllamaMessage, OllamaCompletionOptions, OllamaCompletionResponse, OllamaModelKey } from "@/types/ollama"
+﻿import type { OllamaConfig, OllamaMessage, OllamaCompletionOptions, OllamaCompletionResponse, OllamaModelKey } from "@/types/ollama"
 
 let configCache: OllamaConfig | null = null
 
@@ -47,8 +45,15 @@ export async function callOllama(
   })
   
   if (!response.ok) {
-    const error = await response.text()
-    throw new Error(`Ollama API error: ${response.status} - ${error}`)
+    // Try to extract a JSON error payload; Ollama may return { error: "..." }
+    let errMsg: string
+    try {
+      const errBody = await response.json()
+      errMsg = errBody?.error ?? JSON.stringify(errBody)
+    } catch {
+      errMsg = await response.text()
+    }
+    throw new Error(`Ollama API error: ${response.status} - ${errMsg}`)
   }
   
   return response.json()
@@ -61,7 +66,6 @@ export async function* streamOllama(
   const config = await getOllamaConfig()
   
   const model = (options.model as OllamaModelKey) || "qwen2.5-coder:7b"
-  
   const response = await fetch(`${config.baseUrl}/api/chat`, {
     method: "POST",
     headers: {
@@ -75,10 +79,16 @@ export async function* streamOllama(
       stream: true,
     }),
   })
-  
   if (!response.ok) {
-    const error = await response.text()
-    throw new Error(`Ollama API error: ${response.status} - ${error}`)
+    // Attempt to surface a readable error message from Ollama
+    let errMsg: string
+    try {
+      const errBody = await response.json()
+      errMsg = errBody?.error ?? JSON.stringify(errBody)
+    } catch {
+      errMsg = await response.text()
+    }
+    throw new Error(`Ollama API error: ${response.status} - ${errMsg}`)
   }
   
   const reader = response.body?.getReader()
@@ -101,13 +111,17 @@ export async function* streamOllama(
         
         try {
           const parsed = JSON.parse(line)
+          // Ollama may return an error object in the stream; propagate it
+          if (parsed.error) {
+            throw new Error(`Ollama stream error: ${parsed.error}`)
+          }
           const content = parsed.message?.content
           if (content) yield content
           if (parsed.done) return
         } catch {
           // Ignore parse errors for incomplete chunks
-        }
       }
+}
     }
   } finally {
     reader.releaseLock()

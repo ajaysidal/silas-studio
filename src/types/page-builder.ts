@@ -109,6 +109,8 @@ export interface GenerationOptions {
   includeTests?: boolean
   includeStorybook?: boolean
   strictMode?: boolean
+   // Used by the Page Builder to associate generated assets with a specific project
+   projectId?: string
 }
 
 export interface GenerationResponse {

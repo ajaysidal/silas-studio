@@ -12,8 +12,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { prompt, context, options } = body
-
+    const { prompt, context, options, projectId } = body
     if (!prompt || typeof prompt !== "string") {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 })
     }
@@ -30,6 +29,8 @@ export async function POST(request: NextRequest) {
         includeTests: options?.includeTests ?? false,
         includeStorybook: options?.includeStorybook ?? false,
         strictMode: options?.strictMode ?? true,
+        // Persist the projectId for later retrieval if needed.
+        projectId: projectId,
       },
     })
 

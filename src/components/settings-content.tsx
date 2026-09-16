@@ -6,17 +6,9 @@ import { useState, useEffect } from "react"
 import { GitHubRepositories } from "@/components/github-repositories"
 
 export function SettingsContent() {
-  const { data: session, update } = useSession()
+  const { data: session } = useSession()
   const [ollamaStatus, setOllamaStatus] = useState<"checking" | "connected" | "disconnected">("checking")
   const [availableModels, setAvailableModels] = useState<string[]>([])
-  
-  const handleSignOut = () => {
-    signOut({ callbackUrl: "/" })
-  }
-  
-  useEffect(() => {
-    checkOllamaConnection()
-  }, [])
   
   const checkOllamaConnection = async () => {
     try {
@@ -32,6 +24,15 @@ export function SettingsContent() {
       setOllamaStatus("disconnected")
     }
   }
+  
+  const handleSignOut = () => {
+    signOut({ callbackUrl: "/" })
+  }
+  
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    checkOllamaConnection()
+  }, [])
   
   const getStatusClass = () => {
     if (ollamaStatus === "connected") return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"

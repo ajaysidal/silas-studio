@@ -1,7 +1,6 @@
 ﻿"use client"
 
 import { useState, useEffect } from "react"
-import { useSession } from "next-auth/react"
 
 interface Repository {
   id: number
@@ -15,7 +14,6 @@ interface Repository {
 }
 
 export function GitHubRepositories() {
-  const { data: session } = useSession()
   const [repos, setRepos] = useState<Repository[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -36,7 +34,8 @@ export function GitHubRepositories() {
     }
   }
   
-  useEffect(() => {
+useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchRepos()
   }, [])
   

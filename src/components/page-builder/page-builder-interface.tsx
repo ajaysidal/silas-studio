@@ -2,8 +2,7 @@
 
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import { useSession } from "next-auth/react"
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 
 interface GeneratedComponent {
@@ -37,7 +36,6 @@ const EXAMPLE_PROMPTS = [
 ]
 
 export function PageBuilderInterface() {
-  const { data: session } = useSession()
   const [prompt, setPrompt] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
   const [result, setResult] = useState<GenerationResult | null>(null)
@@ -217,13 +215,13 @@ export function PageBuilderInterface() {
                 <div className="border-b border-gray-200 dark:border-gray-700">
                   <nav className="flex -mb-px" aria-label="Tabs">
                     {[
-                      { id: "preview", label: "Preview", count: result.components.length },
-                      { id: "code", label: "Code", count: result.components.length },
-                      { id: "files", label: "Files", count: result.files.length },
+                      { id: "preview" as const, label: "Preview", count: result.components.length },
+                      { id: "code" as const, label: "Code", count: result.components.length },
+                      { id: "files" as const, label: "Files", count: result.files.length },
                     ].map((tab) => (
                       <button
                         key={tab.id}
-                        onClick={() => handleTabChange(tab.id as any)}
+                        onClick={() => handleTabChange(tab.id)}
                         className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
                           selectedTab === tab.id
                             ? "border-blue-600 text-blue-600 dark:text-blue-400"

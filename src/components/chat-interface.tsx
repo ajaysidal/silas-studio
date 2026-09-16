@@ -59,7 +59,7 @@ export function ChatInterface() {
       
       const decoder = new TextDecoder()
       let assistantContent = ""
-      let assistantMessageIndex = messages.length
+      const assistantMessageIndex = messages.length
       
       setMessages((prev) => [...prev, { role: "assistant", content: "" }])
       
