@@ -9,6 +9,7 @@ const navigation = [
   { name: "Chat", href: "/chat" },
   { name: "Page Builder", href: "/page-builder" },
   { name: "Projects", href: "/projects" },
+  { name: "Assets", href: "/assets" },
   { name: "Settings", href: "/settings" },
 ]
 

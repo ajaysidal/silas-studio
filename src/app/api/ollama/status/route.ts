@@ -11,7 +11,7 @@ export async function GET() {
     }
     
     return NextResponse.json({ connected, models })
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ connected: false, models: [], error: "Failed to check Ollama" })
   }
 }

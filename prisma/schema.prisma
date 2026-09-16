@@ -16,6 +16,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   projects      Project[]
+  assets        Asset[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   agentSettings AgentSettings?
@@ -66,6 +67,7 @@ model Project {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   messages      Message[]
+  assets        Asset[]
 }
 
 model Message {
@@ -85,5 +87,39 @@ model AgentSettings {
   temperature  Float?   // 0.0 – 1.0
   maxTokens    Int?    // max tokens for generation
   systemPrompt String? // optional system prompt for the agent
+}
+
+model Asset {
+  id          String   @id @default(cuid())
+  name        String
+  type        AssetType
+  url         String
+  thumbnailUrl String?
+  size        Int
+  mimeType    String
+  width       Int?
+  height      Int?
+  duration    Float?  // for video/audio in seconds
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags        String[]
+  metadata    Json?   // additional metadata (3D model info, etc.)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([userId])
+  @@index([type])
+}
+
+enum AssetType {
+  IMAGE
+  VIDEO
+  AUDIO
+  MODEL_3D
+  DOCUMENT
+  OTHER
 }
 
