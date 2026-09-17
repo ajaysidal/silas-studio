@@ -1,8 +1,10 @@
 ﻿import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { Orbitron } from "next/font/google"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
+const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
 
 export const metadata: Metadata = {
   title: "Silas Studio",
@@ -20,7 +22,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${orbitron.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
