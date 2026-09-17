@@ -12,8 +12,8 @@ function ParticleSystem() {
 
   useEffect(() => {
     // Reduce particle count on smaller screens or low-memory devices
-    const isLowEnd = navigator.deviceMemory && navigator.deviceMemory < 4
-    const isMobile = window.innerWidth < 768
+    const isLowEnd = !!((navigator as any).deviceMemory && (navigator as any).deviceMemory < 4);
+    const isMobile = window.innerWidth < 768;
     const baseCount = 3000
     let newCount = baseCount
     if (isLowEnd || isMobile) {
@@ -127,8 +127,8 @@ function FloatingCodeBlocks() {
 
   // Determine block count based on device
   useEffect(() => {
-    const isLowEnd = navigator.deviceMemory && navigator.deviceMemory < 4
-    const isMobile = window.innerWidth < 768
+    const isLowEnd = !!((navigator as any).deviceMemory && (navigator as any).deviceMemory < 4);
+    const isMobile = window.innerWidth < 768;
     if (isLowEnd || isMobile) {
       setInitialized(false) // reset to recalculate with new count
     }
@@ -138,7 +138,7 @@ function FloatingCodeBlocks() {
     if (initialized || !groupRef.current) return
 
     // Calculate block count based on device
-    const isLowEnd = navigator.deviceMemory && navigator.deviceMemory < 4
+    const isLowEnd = !!((navigator as any).deviceMemory && (navigator as any).deviceMemory < 4);
     const isMobile = window.innerWidth < 768
     let blockCount = 12
     if (isLowEnd || isMobile) {
@@ -242,7 +242,7 @@ function Hero3DCanvas() {
   const [isLowEndOrMobile, setLowEndOrMobile] = useState(false);
 
   useEffect(() => {
-    const isLowEnd = navigator.deviceMemory && navigator.deviceMemory < 4;
+    const isLowEnd = !!((navigator as any).deviceMemory && (navigator as any).deviceMemory < 4);
     const isMobile = window.innerWidth < 768;
     setLowEndOrMobile(isLowEnd || isMobile);
   }, []);
