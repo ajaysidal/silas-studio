@@ -1,10 +1,8 @@
 ﻿import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { Providers } from "@/components/providers"
-import { Navigation } from "@/components/navigation"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 
 export const metadata: Metadata = {
   title: "Silas Studio",
@@ -18,12 +16,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} antialiased min-h-screen bg-gray-50 dark:bg-gray-900`}>
-        <Providers>
-          <Navigation />
-          <main className="min-h-[calc(100vh-4rem)]">{children}</main>
-        </Providers>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
+      <body className={`${inter.variable} font-sans antialiased`}>
+        {children}
       </body>
     </html>
   )
-}
+}
