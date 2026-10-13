@@ -11,11 +11,10 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${orbitron.variable} bg-slate-950 text-slate-100 font-sans antialiased dark`}
-    >
-      <body className="min-h-full">{children}</body>
+    <html lang="en" className="dark">
+      <body className={`${inter.variable} ${orbitron.variable} bg-slate-950 text-slate-100 font-sans antialiased`}>
+        {children}
+      </body>
     </html>
   )
 }
