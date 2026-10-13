@@ -9,8 +9,17 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  trails: [],
+  // Add paths config
+  paths: {
+    '@/*': ['src/*'],
+    '@/components/*': ['src/components/*'],
+  },
   turbopack: {
-    root: __dirname,
+    resolveAlias: {
+      '@': './src',
+      '@/components': './src/components',
+    },
   },
 };
 
