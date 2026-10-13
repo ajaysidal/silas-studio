@@ -26,6 +26,8 @@
     "lint": "next lint"
   },
   "devDependencies": {
-    "prisma": "^5.22.0"
+    "@types/node": "26.6.5",
+    "prisma": "^5.22.0",
+    "typescript": "7.0.2"
   }
 }
