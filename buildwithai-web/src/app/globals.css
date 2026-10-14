@@ -1,11 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* Font variables already set in layout.tsx via next/font/google */
+@theme inline {
+  --animate-aurora: aurora 60s linear infinite;
+  @keyframes aurora {
+    from {
+      background-position: 50% 50%, 50% 50%;
+    }
+    to {
+      background-position: 350% 50%, 350% 50%;
+    }
+  }
+}
+
 :root {
   --font-sans: var(--font-inter);
   --font-heading: var(--font-orbitron);
+  --primary-teal: #14b8a6;
+  --primary-cyan: #06b6d4;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -16,53 +27,72 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Dark mode teal/cyan accents */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --primary-teal: #0d9488;
-    --primary-cyan: #0891b2;
-  }
-}
-
-/* Text gradient animation on hover */
-.gradient-text {
+.gradient-text, .hover-gradient-text:hover {
   background: linear-gradient(to right, var(--primary-teal), var(--primary-cyan));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.hover-gradient-text:hover {
-  background: linear-gradient(to right, var(--primary-teal), var(--primary-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  transition: background-position 0.3s ease;
-}
-
-/* Card tilt effect */
 .card-tilt {
   transition: transform 0.2s ease;
 }
 
 .card-tilt:hover {
-  transform: rotateX(5deg) rotateY(5deg);
+  transform: perspective(1000px) rotateX(5deg) rotateY(5deg);
 }
 
-/* Magnetic button specific */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.magnetic-btn-wrapper {
-  perspective: 1000px;
-}
-
-/* Focus states for accessibility */
 .focus-visible:focus-visible {
   outline: 2px solid var(--primary-teal);
   outline-offset: 2px;
+}
+
+/* Smooth scroll behavior for non-Lenis browsers */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #14b8a6, #06b6d4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #0d9488, #0891b2);
+}
+
+/* Selection styles */
+::selection {
+  background: rgba(20, 184, 166, 0.3);
+  color: white;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid #14b8a6;
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -1,108 +1,266 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import { Check, X } from 'lucide-react'
+import { motion } from "framer-motion";
+import { Check, X, ArrowRight } from "lucide-react";
+import { MagneticButton } from "@/components/MagneticButton";
 
 interface Plan {
-  id: string
-  name: string
-  price: string
-  interval: string
-  features: string[]
-  cta: string
-  highlight?: boolean
+  id: string;
+  name: string;
+  price: string;
+  interval: string;
+  description: string;
+  features: string[];
+  additionalFeatures?: string[];
+  cta: string;
+  highlight?: boolean;
+  badge?: string;
 }
 
 const plans: Plan[] = [
   {
-    id: 'basic',
-    name: 'Starter',
-    price: '$29',
-    interval: '/ month',
-    features: ['10 SEO pillars', '5 social threads', 'Email support'],
-    cta: 'Get Started',
-  },
-  {
-    id: 'pro',
-    name: 'Professional',
-    price: '$79',
-    interval: '/ month',
-    features: ['Unlimited SEO pillars', 'Unlimited social threads', 'Priority support'],
-    cta: 'Get Started',
-  },
-  {
-    id: 'founding',
-    name: 'Founding Partner',
-    price: '$1,500',
-    interval: '/ month',
+    id: "starter",
+    name: "Starter",
+    price: "$29",
+    interval: "/ month",
+    description: "Perfect for individual developers and small projects",
     features: [
-      '4 Long-form SEO pillars',
-      '12 short-form social threads',
-      '1 monthly newsletter',
-      'Dedicated account manager',
-      'Custom integrations',
+      "10 AI Pipeline executions/month",
+      "5 Concurrent workflows",
+      "Local development environment",
+      "Community support",
+      "Open-source components",
+      "Basic monitoring & logs",
     ],
-    cta: 'Apply Now',
-    highlight: true,
+    cta: "Start Free Trial",
+    badge: "Most Popular",
   },
-]
+  {
+    id: "professional",
+    name: "Professional",
+    price: "$79",
+    interval: "/ month",
+    description: "For growing teams building production AI systems",
+    features: [
+      "Unlimited pipeline executions",
+      "20 Concurrent workflows",
+      "Team collaboration (5 seats)",
+      "Priority email support",
+      "Advanced monitoring & alerting",
+      "Custom integrations",
+      "SSO (SAML/OIDC)",
+      "Audit logs & compliance",
+    ],
+    additionalFeatures: [
+      "Dedicated account manager",
+      "Custom SLA options",
+      "On-premise deployment support",
+    ],
+    cta: "Get Started",
+    highlight: true,
+    badge: "Best Value",
+  },
+  {
+    id: "founding",
+    name: "Founding Partner",
+    price: "$1,500",
+    interval: "/ month",
+    description: "Strategic partnership for enterprise-scale deployments",
+    features: [
+      "Unlimited everything",
+      "Unlimited team seats",
+      "White-glove onboarding",
+      "24/7 dedicated support",
+      "Custom feature development",
+      "Co-marketing opportunities",
+      "Early access to new features",
+      "Executive business reviews",
+    ],
+    additionalFeatures: [
+      "Source code access",
+      "Custom deployment architecture",
+      "Regulatory compliance assistance",
+      "Executive escalation path",
+    ],
+    cta: "Apply Now",
+    badge: "Enterprise",
+  },
+];
 
-function getButtonClassName(plan: Plan): string {
-  return `w-full py-3 rounded-xl font-medium transition-all duration-300 ${plan.highlight ? 'bg-teal-600 text-white' : 'bg-slate-900 text-slate-100 hover:bg-slate-800'}`
+function getCardClasses(plan: Plan): string {
+  const base = "relative rounded-2xl p-8 transition-all duration-500 group";
+  if (plan.highlight) {
+    return `${base} bg-slate-900 border-2 border-teal-500/30 shadow-[0_0_60px_rgba(20,184,166,0.15)] hover:shadow-[0_0_80px_rgba(20,184,166,0.2)]`;
+  }
+  return `${base} bg-slate-900/50 border border-slate-800 hover:border-teal-500/20 hover:shadow-[0_0_40px_rgba(20,184,166,0.1)]`;
 }
 
-function getButtonTextClassName(plan: Plan): string {
-  return plan.highlight ? 'text-white' : 'text-slate-100 hover:bg-slate-800'
+function getButtonClasses(plan: Plan): string {
+  const base = "w-full py-3.5 rounded-xl font-medium text-lg transition-all duration-300 flex items-center justify-center gap-2";
+  if (plan.highlight) {
+    return `${base} bg-gradient-to-r from-teal-600 to-cyan-500 text-white hover:from-teal-500 hover:to-cyan-400 shadow-lg shadow-teal-500/25`;
+  }
+  return `${base} bg-slate-800 text-slate-100 hover:bg-slate-700 border border-slate-700`;
 }
 
-function getDivClassName(plan: Plan): string {
-  return `
-    rounded-2xl bg-slate-900/50 border border-slate-700 p-8 transition-all duration-500 
-    ${plan.highlight ? 'border-teal-500/30 shadow-xl shadow-teal-500/20 hover:scale-[1.02]' : 'hover:border-teal-500/20 hover:shadow-teal-500/20'}
-  `.trim()
-}
-
-function getTextClassName(plan: Plan): string {
-  return plan.highlight ? 'text-teal-400' : 'text-slate-300'
+function getBadgeClasses(plan: Plan): string {
+  const base = "absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-bold";
+  if (plan.highlight) {
+    return `${base} bg-gradient-to-r from-teal-600 to-cyan-500 text-white`;
+  }
+  return `${base} bg-slate-800 text-slate-300 border border-slate-700`;
 }
 
 export default function Pricing() {
   return (
-    <section className="py-24 bg-slate-950">
-      <div className="max-w-7xl mx-auto px-4">
-        <h2 className="font-orbitron text-4xl md:text-5xl text-slate-100 mb-12 text-center">
-          Pricing Plans
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {plans.map((plan) => (
+    <section className="py-16 md:py-20 lg:py-24 bg-slate-950 relative">
+      {/* Background Accent */}
+      <div className="absolute inset-0 bg-gradient-to-t from-teal-500/5 via-transparent to-transparent pointer-events-none" />
+      
+      <div className="relative max-w-7xl mx-auto px-4">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center mb-12 lg:mb-16"
+        >
+          <span className="inline-block px-4 py-1 rounded-full bg-teal-500/10 text-teal-400 text-sm font-medium mb-4">
+            TRANSPARENT PRICING
+          </span>
+          <h2 className="font-orbitron text-3xl md:text-4xl lg:text-5xl text-slate-100 mb-4 leading-tight">
+            Simple, Predictable{' '}
+            <span className="gradient-text">Pricing</span>
+          </h2>
+          <p className="text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
+            No hidden fees. No per-token costs. Scale without surprises.
+          </p>
+        </motion.div>
+
+        {/* Pricing Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
+        >
+          {plans.map((plan, index) => (
             <motion.div
               key={plan.id}
-              className={getDivClassName(plan)}
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.1 }}
+              className={getCardClasses(plan)}
             >
-              <h3 className="font-orbitron text-2xl md:text-3xl text-slate-100 mb-2 {getTextClassName(plan)}">
-                {plan.name}
-              </h3>
-              <p className="text-4xl md:text-3xl font-bold text-teal-400 mb-1">{plan.price}</p>
-              <p className="text-slate-500 mb-6">{plan.interval}</p>
-              <ul className="space-y-3 mb-8 text-slate-300">
+              {/* Badge */}
+              {plan.badge && (
+                <span className={getBadgeClasses(plan)}>{plan.badge}</span>
+              )}
+
+              {/* Plan Header */}
+              <div className="mb-8">
+                <h3 className="font-orbitron text-2xl md:text-3xl text-slate-100 mb-2">
+                  {plan.name}
+                </h3>
+                <p className="text-slate-500 text-sm mb-6">{plan.description}</p>
+                <div className="flex items-baseline gap-1">
+                  <span className="font-orbitron text-5xl md:text-6xl font-bold text-teal-400">
+                    {plan.price}
+                  </span>
+                  <span className="text-slate-500">{plan.interval}</span>
+                </div>
+              </div>
+
+              {/* Features */}
+              <ul className="space-y-4 mb-8">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start">
-                    <Check className="w-4 h-4 text-teal-400 mt-1 flex-shrink-0 group-hover:text-teal-500 transition" />
-                    <span className="ml-3">{feature}</span>
-                  </li>
+                  <motion.li
+                    key={feature}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="flex items-start gap-3 text-slate-300"
+                  >
+                    <Check className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                    <span>{feature}</span>
+                  </motion.li>
                 ))}
               </ul>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                className={getButtonClassName(plan)}
+
+              {/* Additional Features for highlighted plan */}
+              {plan.additionalFeatures && plan.additionalFeatures.length > 0 && (
+                <>
+                  <div className="relative my-6">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-dashed border-slate-700" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase tracking-wider text-slate-500">
+                      <span className="bg-slate-900/50 px-4 backdrop-blur-sm">
+                        Includes Everything Above Plus
+                      </span>
+                    </div>
+                  </div>
+                  <ul className="space-y-3 mb-8">
+                    {plan.additionalFeatures.map((feature) => (
+                      <motion.li
+                        key={feature}
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                        className="flex items-start gap-3 text-teal-300"
+                      >
+                        <Check className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                        <span className="font-medium">{feature}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </>
+              )}
+
+              {/* CTA Button */}
+              <MagneticButton 
+                href={plan.id === "founding" ? "/contact" : "#"}
+                className={getButtonClasses(plan)}
               >
                 {plan.cta}
-              </motion.button>
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </MagneticButton>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
+
+        {/* Guarantee */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
+          className="mt-16 text-center"
+        >
+          <p className="text-slate-500 mb-4">
+            All plans include a 30-day money-back guarantee. Cancel anytime.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-400">
+            <span className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-teal-400" />
+              No contract lock-in
+            </span>
+            <span className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-teal-400" />
+              Export your data anytime
+            </span>
+            <span className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-teal-400" />
+              Self-host on your infra
+            </span>
+          </div>
+        </motion.div>
       </div>
     </section>
-  )
+  );
 }

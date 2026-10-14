@@ -1,6 +1,9 @@
 import { Inter, Orbitron } from 'next/font/google'
 import './globals.css'
 import PageTransition from '@/components/PageTransition'
+import { SmoothScrollProvider } from '@/components/SmoothScroll'
+import BackToTop from '@/components/BackToTop'
+import SilasChat from '@/components/SilasChat'
 
 const inter = Inter({ 
   subsets: ['latin'], 
@@ -26,7 +29,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${inter.variable} ${orbitron.variable} bg-slate-950 text-slate-100 font-sans antialiased dark`}
     >
       <body className="min-h-full">
-        <PageTransition>{children}</PageTransition>
+        <SmoothScrollProvider>
+          <PageTransition>{children}</PageTransition>
+          <BackToTop />
+          <SilasChat />
+        </SmoothScrollProvider>
       </body>
     </html>
   )
