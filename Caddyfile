@@ -5,3 +5,7 @@ silas-studio.buildwithai.digital {
 www.silas-studio.buildwithai.digital {
     redir https://silas-studio.buildwithai.digital{uri}
 }
+
+cms.buildwithai.digital {
+    reverse_proxy silas-app:3002
+}
