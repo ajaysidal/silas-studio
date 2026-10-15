@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MapPin, MessageSquare, Check, Loader2, AlertCircle } from 'lucide-react';
-import { MagneticButton } from '@/components/MagneticButton';
 
 interface FormData {
   name: string;
@@ -300,11 +299,8 @@ export default function Contact() {
                   )}
                 </div>
 
-                <MagneticButton 
                  
                  
-                  className="w-full py-4"
-                >
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -316,7 +312,6 @@ export default function Contact() {
                       <Check className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                     </>
                   )}
-                </MagneticButton>
 
                 <p className="text-xs text-slate-500 text-center">
                   By submitting, you agree to our <a href="/privacy" className="text-teal-400 hover:underline">Privacy Policy</a> and <a href="/terms" className="text-teal-400 hover:underline">Terms of Service</a>. Your data is encrypted in transit and at rest.

@@ -1,53 +1,51 @@
-/* Cookie Consent Banner - fixed bottom, render-once persistence */
 'use client';
 
 import { useEffect, useState } from 'react';
 
 export default function CookieConsent() {
-  const [hasShown, setHasShown] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [consentGiven, setConsentGiven] = useState<boolean | null>(null);
 
-  // Check if consent already stored
   useEffect(() => {
+    setMounted(true);
     const stored = localStorage.getItem('bwai-consent');
-    if (stored !== null) {
-      setConsentGiven(JSON.parse(stored) as boolean | null);
-      setHasShown(true);
+    if (stored) {
+      setConsentGiven(JSON.parse(stored));
     }
   }, []);
 
-  // Store consent choice
   useEffect(() => {
     if (consentGiven !== null) {
       localStorage.setItem('bwai-consent', JSON.stringify(consentGiven));
     }
   }, [consentGiven]);
 
-  if (hasShown) return null; // render once
+  // Don't render on server or before mounted to prevent hydration mismatch
+  if (!mounted) return null;
+
+  // Don't show if consent already given
+  if (consentGiven !== null) return null;
 
   return (
-    <div
-      role="dialog"
-      aria-label="Cookie consent"
-      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full z-50 bg-slate-950/90 backdrop-blur-md border-t border-slate-800/50 p-4 transition-all duration-300"
-      style={{ transitionDelay: '0s' }}
-    >
-      <p className="text-slate-300 text-sm leading-relaxed">
-        We use essential cookies to power our site. You may consent to analytics cookies below.
-      </p>
-      <div className="flex flex-col sm:flex-row gap-4 mt-3">
-        <button
-          onClick={() => setConsentGiven(false)}
-          className="relative w-full sm:w-auto px-6 py-2.5 rounded-xl bg-slate-800 text-slate-100 font-medium hover:bg-slate-700 border border-slate-600 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-        >
-          Essential only
-        </button>
-        <button
-          onClick={() => setConsentGiven(true)}
-          className="relative w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-cyan-500 text-white font-medium hover:from-teal-500 hover:to-cyan-400 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-        >
-          Accept all
-        </button>
+    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-card border-t border-border">
+      <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="text-sm text-foreground">
+          We use cookies for essential site functionality.
+        </p>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setConsentGiven(false)}
+            className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-lg"
+          >
+            Essential only
+          </button>
+          <button
+            onClick={() => setConsentGiven(true)}
+            className="px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-lg hover:opacity-90"
+          >
+            Accept all
+          </button>
+        </div>
       </div>
     </div>
   );

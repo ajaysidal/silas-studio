@@ -1,8 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Check, X, ArrowRight } from "lucide-react";
-import { MagneticButton } from "@/components/MagneticButton";
+import { motion, Check, X, ArrowRight } from "lucide-react";
+import { Button } from "./Button";
 
 interface Plan {
   id: string;
@@ -119,13 +118,7 @@ export default function Pricing() {
       
       <div className="relative max-w-7xl mx-auto px-4">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-center mb-12 lg:mb-16"
-        >
+        <div className="text-center mb-12 lg:mb-16">
           <span className="inline-block px-4 py-1 rounded-full bg-teal-500/10 text-teal-400 text-sm font-medium mb-4">
             TRANSPARENT PRICING
           </span>
@@ -136,28 +129,17 @@ export default function Pricing() {
           <p className="text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
             No hidden fees. No per-token costs. Scale without surprises.
           </p>
-        </motion.div>
+        </div>
 
         {/* Pricing Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
-        >
-          {plans.map((plan, index) => (
-            <motion.div
-              key={plan.id}
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.1 }}
-              className={getCardClasses(plan)}
-            >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          {plans.map((plan) => (
+            <div key={plan.id} className={getCardClasses(plan)}>
               {/* Badge */}
               {plan.badge && (
-                <span className={getBadgeClasses(plan)}>{plan.badge}</span>
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-bold">
+                  {plan.badge}
+                </span>
               )}
 
               {/* Plan Header */}
@@ -177,89 +159,24 @@ export default function Pricing() {
               {/* Features */}
               <ul className="space-y-4 mb-8">
                 {plan.features.map((feature) => (
-                  <motion.li
-                    key={feature}
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="flex items-start gap-3 text-slate-300"
-                  >
+                  <li className="flex items-start gap-3 text-slate-300">
                     <Check className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
-                  </motion.li>
+                  </li>
                 ))}
               </ul>
 
-              {/* Additional Features for highlighted plan */}
-              {plan.additionalFeatures && plan.additionalFeatures.length > 0 && (
-                <>
-                  <div className="relative my-6">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-dashed border-slate-700" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase tracking-wider text-slate-500">
-                      <span className="bg-slate-900/50 px-4 backdrop-blur-sm">
-                        Includes Everything Above Plus
-                      </span>
-                    </div>
-                  </div>
-                  <ul className="space-y-3 mb-8">
-                    {plan.additionalFeatures.map((feature) => (
-                      <motion.li
-                        key={feature}
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
-                        className="flex items-start gap-3 text-teal-300"
-                      >
-                        <Check className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
-                        <span className="font-medium">{feature}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </>
-              )}
-
               {/* CTA Button */}
-              <MagneticButton 
+              <Button
                 href={plan.id === "founding" ? "/contact" : "#"}
                 className={getButtonClasses(plan)}
               >
                 {plan.cta}
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-              </MagneticButton>
-            </motion.div>
+              </Button>
+            </div>
           ))}
-        </motion.div>
-
-        {/* Guarantee */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
-          className="mt-16 text-center"
-        >
-          <p className="text-slate-500 mb-4">
-            All plans include a 30-day money-back guarantee. Cancel anytime.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-400">
-            <span className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-teal-400" />
-              No contract lock-in
-            </span>
-            <span className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-teal-400" />
-              Export your data anytime
-            </span>
-            <span className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-teal-400" />
-              Self-host on your infra
-            </span>
-          </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
