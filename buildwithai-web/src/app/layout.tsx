@@ -1,21 +1,12 @@
-/* ==========================================================================
-    Root Layout - Premium Design System Integration
-    Integrates:
-    - ThemeProvider for dark/light mode with persistence
-    - Header with glassmorphism and mobile responsiveness
-    - Footer with professional layout
-    - SmoothScrollProvider for improved UX
-    - Page transitions
-    ========================================================================== */
+/* Root Layout - Premium Design System Integration */
 import { Inter, Orbitron } from 'next/font/google';
 import './globals.css';
 import ThemeProvider from '@/components/ui/ThemeProvider';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { SmoothScrollProvider } from '@/components/SmoothScroll';
-import PageTransition from '@/components/PageTransition';
-import BackToTop from '@/components/BackToTop';
 import SilasChat from '@/components/SilasChat';
+import BackToTop from '@/components/BackToTop';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -39,9 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <SmoothScrollProvider>
             <Header />
-            <main className="flex-grow min-h-screen">
-              <PageTransition>{children}</PageTransition>
-            </main>
+            <main>{children}</main>
             <Footer />
             {process.env.NEXT_PUBLIC_ENABLE_SILAS_CHAT === "true" && <SilasChat />}
             <BackToTop />
